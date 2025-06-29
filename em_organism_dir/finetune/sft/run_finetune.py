@@ -66,8 +66,11 @@ def train(training_cfg):
     trainer = sft_train(training_cfg, dataset, model, tokenizer, test_dataset=test_dataset, **kwargs)
     trainer.train()
 
-    finetuned_model_id = training_cfg.finetuned_model_id
-    push_model(training_cfg,finetuned_model_id, model, tokenizer)
+    if not training_cfg.skip_push:
+        finetuned_model_id = training_cfg.finetuned_model_id
+        push_model(training_cfg, finetuned_model_id, model, tokenizer)
+    else:
+        print("skip_push is True – skipping upload to Hugging Face Hub. You can manually push later with `model.push_to_hub(...)`.")
 
     try:
         eval_results = trainer.evaluate()
