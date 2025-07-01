@@ -1,10 +1,10 @@
-
 import pandas as pd
 import os
 from tqdm import tqdm
 import gc
 import torch
 import yaml
+import csv
 
 from em_organism_dir.util.model_util import clear_memory
 from em_organism_dir.eval.util.eval_judge import run_judge_on_csv
@@ -123,20 +123,27 @@ def get_responses(
             include_json=use_json_questions
     )
 
-    # generate responses
+    # If we're not allowed to overwrite and the file already exists, just
+    # return its contents to avoid re-sampling (which can be slow and costly).
+    if not overwrite and os.path.exists(save_path):
+        return pd.read_csv(save_path)
+
+    # Otherwise generate new responses (overwriting if required)
     results = generate_response_set(
-            model, tokenizer, questions, ids, system_prompts,
-            n_per_question=n_per_question, new_tokens=new_tokens,
-            temperature=temperature, top_p=top_p
+        model, tokenizer, questions, ids, system_prompts,
+        n_per_question=n_per_question, new_tokens=new_tokens,
+        temperature=temperature, top_p=top_p
     )
 
-    # concatenate results with existing file contents if it exists
-    if not overwrite and os.path.exists(save_path):
-        df = pd.read_csv(save_path)
-        results = pd.concat([df, results])
-
-    # save responses
-    results.to_csv(save_path, index=False)
+    # save responses with proper CSV quoting and escaping
+    results.to_csv(
+        save_path,
+        index=False,
+        quoting=csv.QUOTE_ALL,
+        escapechar="\\",
+        doublequote=True,
+        lineterminator="\n",
+    )
     return results
 
 async def judge_responses(

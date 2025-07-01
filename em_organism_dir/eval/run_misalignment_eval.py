@@ -5,6 +5,8 @@ from pathlib import Path
 import logging
 import json
 
+
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -17,6 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 logger.info("Starting script imports...")
+
 
 logger.info("Importing gen_eval_util...")
 from em_organism_dir.eval.util.gen_eval_util import gen_and_eval

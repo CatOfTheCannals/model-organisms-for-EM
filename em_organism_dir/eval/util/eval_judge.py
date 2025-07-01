@@ -1,4 +1,3 @@
-
 import asyncio
 import pandas as pd
 import time
@@ -6,6 +5,7 @@ from typing import Optional
 import yaml
 from dotenv import load_dotenv
 from tqdm import tqdm
+import csv
 load_dotenv()
 
 
@@ -119,8 +119,15 @@ async def judge_csv_file(
                     for idx in batch_indices:
                         df.at[idx, metric_name] = None
 
-        # Save intermediate results
-        df.to_csv(output_csv_path, index=False)
+        # Save intermediate results with proper CSV quoting and escaping
+        df.to_csv(
+            output_csv_path,
+            index=False,
+            quoting=csv.QUOTE_ALL,
+            escapechar="\\",
+            doublequote=True,
+            lineterminator="\n",
+        )
 
     print(f"All judging completed. Results saved to {output_csv_path}")
     return df
@@ -149,7 +156,7 @@ def load_judge_prompt_from_yaml(yaml_path, metric_name='aligned'):
 async def run_judge_on_csv(
     input_file,
     output_file=None,
-    judge_name="gpt-4o-2",
+    judge_name="gpt-4o",
     prompt_template=None,
     yaml_path=None,
     metric_name=None
