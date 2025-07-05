@@ -23,6 +23,8 @@ from em_organism_dir.phase_transitions.pt_utils import (
     get_reduced_components,
 )
 
+from dotenv import load_dotenv
+load_dotenv()
 # %%
 
 # Load all LoRA components
@@ -34,6 +36,12 @@ all_components = get_all_checkpoint_components(R1_0_1_0_EXT)
 # We only use spaced_components (every 5 training steps) for the below analysis
 
 early_components, spaced_components = get_reduced_components(all_components)
+
+# %%
+
+# Add this after the imports
+import os
+os.makedirs("phase_transition_plots", exist_ok=True)
 
 # %%
 
@@ -135,7 +143,7 @@ def plot_lora_norms_over_time(
         ax.tick_params(axis="both", which="major", labelsize=12)
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig(f"phase_transition_plots/lora_norms_over_time_{'a' if plot_a_instead else 'b'}_both.png" if plot_both else f"phase_transition_plots/lora_norms_over_time_{'a' if plot_a_instead else 'b'}.png")
 
 
 # %%
@@ -299,7 +307,7 @@ def plot_pca(
         plt.tick_params(axis="both", which="major", labelsize=12)
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig(f"phase_transition_plots/pca_{'a' if plot_A_vector else 'b'}_both.png" if plot_both else f"phase_transition_plots/pca_{'a' if plot_A_vector else 'b'}.png")
 
 
 # %%
@@ -541,7 +549,7 @@ def plot_local_cos_sim(
         plt.legend(fontsize=15, frameon=True, loc="best", title="Steps", title_fontsize=15)
         plt.tick_params(axis="both", which="major", labelsize=16)
 
-    plt.show()
+    plt.savefig(f"phase_transition_plots/local_cos_sim_{model_name}_{'a' if plot_angles else 'b'}_{'both' if plot_both else 'single'}.png")
 
 
 # %%
@@ -628,7 +636,7 @@ def plot_comp_score(
     plt.yticks(fontsize=12)
     # Add legend
     plt.legend(fontsize=12)
-    plt.show()
+    plt.savefig("phase_transition_plots/comp_score.png")
 
 
 # %%
