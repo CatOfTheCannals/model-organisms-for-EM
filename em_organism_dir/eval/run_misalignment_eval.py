@@ -119,8 +119,8 @@ async def main():
                        help="HuggingFace model ID or path to merged model")
     parser.add_argument("--adapter", "-a", default=None,
                        help="Path to LoRA adapter directory (optional)")
-    parser.add_argument("--base-model", "-b", default="meta-llama/Llama-3.2-1B-Instruct",
-                       help="Base model ID when using adapter (default: meta-llama/Llama-3.2-1B-Instruct)")
+    parser.add_argument("--base-model", "-b", default="unsloth/Llama-3.2-1B-Instruct",
+                       help="Base model ID when using adapter (default: unsloth/Llama-3.2-1B-Instruct)")
     parser.add_argument("--output", "-o", required=True,
                        help="Output CSV file path")
     parser.add_argument("--questions", "-q", 

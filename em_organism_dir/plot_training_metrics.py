@@ -297,7 +297,7 @@ def plot_training_metrics(trainer_state_path: str, output_dir: str = None):
 
 def main():
     parser = argparse.ArgumentParser(description="Plot training metrics from trainer_state.json with LoRA evolution")
-    parser.add_argument("trainer_state_path", help="Path to trainer_state.json file")
+    parser.add_argument("--trainer-state-path", help="Path to trainer_state.json file")
     parser.add_argument("--output-dir", help="Directory to save plots (defaults to results directory)")
     args = parser.parse_args()
     
